@@ -1,84 +1,37 @@
-window.addEventListener("load", () => {
-  const game = document.getElementById("game");
-  const dino = document.getElementById("dino");
-  const rock = document.getElementById("rock");
-  const scoreEl = document.getElementById("score");
-  const gameOverEl = document.getElementById("gameOver");
+const dolphin = document.getElementById("dolphin")
+const algae = document.getElementById("rock")
+const score = document.getElementById("score")
 
-  let points = 0;
-  let gameOver = false;
+function jump() {
+  dolphin.classList.add("jump-animation")
+  setTimeout(() => dolphin.classList.remove("jump-animation"), 800)
+}
 
-  scoreEl.innerText = points;
+document.addEventListener("keypress", (event) => {
+  if (!dolphin.classList.contains("jump-animation")) {
+    jump()
+  }
+})
 
-  game.focus();
+setInterval(() => {
+  const dolphinTop = parseInt(
+    window.getComputedStyle(dolphin).getPropertyValue("top"),
+  )
+  const algaeLeft = parseInt(
+    window.getComputedStyle(algae).getPropertyValue("left"),
+  )
+  score.innerText++
 
-  function jump() {
-    if (gameOver) return;
-    if (dino.classList.contains("jump-animation")) return;
-
-    dino.classList.add("jump-animation");
-    setTimeout(() => dino.classList.remove("jump-animation"), 500);
+  if (algaeLeft < 0) {
+    algae.style.display = "none"
+  } else {
+    algae.style.display = ""
   }
 
-  function restart() {
-    gameOver = false;
-    points = 0;
-    scoreEl.innerText = points;
-
-    rock.style.animation = "none";
-    void rock.offsetWidth;
-    rock.style.animation = "rock 1.33s infinite linear";
-    rock.style.left = "550px";
-
-    dino.classList.remove("jump-animation");
-    dino.style.top = "225px";
-
-    gameOverEl.classList.add("hidden");
-
-    game.focus();
-  }
-
-  function handleKeyDown(e) {
-    if (e.code === "KeyR" && gameOver) {
-      e.preventDefault();
-      restart();
-      return;
+  if (algaeLeft < 50 && algaeLeft > 0 && dolphinTop > 150) {
+    alert("You got a score of: " + score.innerText +
+      "\n\nPlay again?");
+    location.reload();
+    score.innerText = 0
     }
-
-    if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") {
-      e.preventDefault();
-      jump();
-    }
-  }
-
-  game.addEventListener("keydown", handleKeyDown);
-
-  game.addEventListener("click", () => {
-    game.focus();
-    jump();
-  });
-
-  game.addEventListener("touchstart", () => {
-    game.focus();
-    jump();
-  });
-
-  setInterval(() => {
-    if (gameOver) return;
-
-    const dinoTop = parseInt(getComputedStyle(dino).getPropertyValue("top"));
-    const rockLeft = parseInt(getComputedStyle(rock).getPropertyValue("left"));
-
-    points += 1;
-    scoreEl.innerText = points;
-
-    if (rockLeft < 90 && rockLeft > 20 && dinoTop > 165) {
-      gameOver = true;
-
-      rock.style.animation = "none";
-      rock.style.left = rockLeft + "px";
-
-      gameOverEl.classList.remove("hidden");
-    }
-  }, 100);
-});
+}, 50)
