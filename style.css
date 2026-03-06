@@ -9,35 +9,35 @@
   margin: auto;
   background-image: url("https://static.spektrum.de/fm/912/f2000x857/Fotolia_61981641.jpg");
   background-size: cover;
+  position: relative;
+  overflow: hidden;
 }
 
 #dolphin {
   height: 75px;
   width: 150px;
   top: 225px;
-  position: relative;
+  position: absolute;
   background-image: url("https://static.vecteezy.com/system/resources/thumbnails/049/100/278/small/realistic-dolphin-swimming-gracefully-marine-life-transparent-background-png.png");
   background-size: cover;
+  transition: transform 0.1s; /* Für flüssigere Animationen */
 }
 
 #algae {
   width: 50px;
   height: 50px;
-  position: relative;
-  top: 175px;
+  position: absolute;
+  top: 225px;
   left: 550px;
   background-image: url("https://static.vecteezy.com/system/resources/thumbnails/041/712/295/small/ai-generated-fresh-green-sea-lettuce-algae-on-transparent-background-stock-png.png");
   background-size: cover;
-  animation: algae 1.33s infinite;
+  animation: algae 1.33s infinite linear;
+  animation-play-state: paused;
 }
 
 @keyframes algae {
-  0% {
-    left: 550px;
-  }
-  100% {
-    left: -50px;
-  }
+  0% { left: 600px; }
+  100% { left: -50px; }
 }
 
 .jump-animation {
@@ -45,16 +45,22 @@
 }
 
 @keyframes jump {
-  0% {
-    top: 225px;
-  }
-  50% {
-    top: 75px;
-  }
-  75% {
-    top: 75px;
-  }
-  100% {
-    top: 225px;
-  }
+  0% { top: 225px; }
+  50% { top: 75px; }
+  100% { top: 225px; }
+}
+
+/* --- NEU: Kollisions-Animation --- */
+.collision-animation {
+  animation: collision 0.8s ease-in-out; /* Läuft 0,8 Sekunden */
+}
+
+@keyframes collision {
+  0% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
+  15% { transform: scale(1.1) rotate(-10deg) translateX(-5px); filter: hue-rotate(90deg) brightness(1.2); } /* Rot aufblinken & Vibrieren */
+  30% { transform: scale(1.1) rotate(10deg) translateX(5px); filter: hue-rotate(90deg) brightness(1.2); }
+  45% { transform: scale(1.1) rotate(-10deg) translateX(-5px); filter: hue-rotate(90deg) brightness(1.2); }
+  60% { transform: scale(1.1) rotate(10deg) translateX(5px); filter: hue-rotate(90deg) brightness(1.2); }
+  75% { transform: scale(1.05) rotate(0deg); filter: hue-rotate(45deg); } /* Langsam abklingen */
+  100% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
 }
